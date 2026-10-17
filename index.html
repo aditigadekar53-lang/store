@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bundobust — Indian Street Food & Craft Beer | Leeds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0c0a;
+    --bg-2:#17130f;
+    --card:#1f1a15;
+    --gold:#e0a44a;
+    --gold-2:#f3c878;
+    --cream:#f5efe6;
+    --muted:#a89b8c;
+    --line:rgba(224,164,74,.18);
+    --max:1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--cream);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--gold);color:#000}
+  h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.15}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  section{position:relative;padding:110px 0}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;width:100%;z-index:100;
+    padding:22px 0;
+    transition:.4s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(14,12,10,.85);
+    backdrop-filter:blur(14px);
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;letter-spacing:.5px}
+  .logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:34px;font-size:.9rem;font-weight:500}
+  .nav-links a{position:relative;color:var(--cream);opacity:.85;transition:.3s}
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:-6px;width:0;height:2px;
+    background:var(--gold);transition:.35s ease;
+  }
+  .nav-links a:hover{opacity:1}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{
+    background:var(--gold);color:#0e0c0a;padding:11px 22px;border-radius:40px;
+    font-weight:700;font-size:.85rem;transition:.3s;
+  }
+  .nav-cta:hover{background:var(--gold-2);transform:translateY(-2px)}
+  .burger{display:none;font-size:1.6rem;cursor:pointer;color:var(--gold)}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding-top:120px;
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(224,164,74,.18), transparent 45%),
+      radial-gradient(circle at 85% 70%, rgba(224,164,74,.12), transparent 40%);
+    z-index:0;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;
+    position:relative;z-index:2;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:9px;
+    background:rgba(224,164,74,.1);border:1px solid var(--line);
+    padding:8px 16px;border-radius:40px;font-size:.78rem;font-weight:600;
+    color:var(--gold-2);letter-spacing:.5px;margin-bottom:26px;
+  }
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+  .hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;letter-spacing:-1px}
+  .hero h1 .accent{color:var(--gold);font-style:italic}
+  .hero p.sub{
+    margin:26px 0 34px;font-size:1.1rem;color:var(--muted);max-width:520px;font-weight:300;
+  }
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+  .btn{
+    padding:15px 30px;border-radius:40px;font-weight:600;font-size:.92rem;
+    transition:.3s;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  }
+  .btn-primary{background:var(--gold);color:#0e0c0a}
+  .btn-primary:hover{background:var(--gold-2);transform:translateY(-3px);box-shadow:0 14px 30px rgba(224,164,74,.28)}
+  .btn-ghost{border:1px solid var(--line);color:var(--cream)}
+  .btn-ghost:hover{background:rgba(224,164,74,.08);border-color:var(--gold)}
+
+  .hero-card{
+    background:linear-gradient(160deg,#241d16,#15110d);
+    border:1px solid var(--line);border-radius:24px;padding:34px;
+    box-shadow:0 30px 70px rgba(0,0,0,.5);
+    position:relative;
+  }
+  .hero-card::after{
+    content:'';position:absolute;inset:0;border-radius:24px;
+    background:radial-gradient(circle at 70% 0%,rgba(224,164,74,.22),transparent 60%);
+    pointer-events:none;
+  }
+  .rating-row{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+  .rating-num{font-size:3rem;font-weight:900;font-family:'Playfair Display',serif;color:var(--gold)}
+  .stars{color:var(--gold-2);letter-spacing:2px;font-size:1rem}
+  .rating-row small{color:var(--muted);font-size:.8rem;display:block}
+  .hero-card .divider{height:1px;background:var(--line);margin:20px 0}
+  .info-line{display:flex;justify-content:space-between;font-size:.9rem;padding:9px 0;color:var(--muted)}
+  .info-line b{color:var(--cream);font-weight:600}
+
+  /* ---------- SECTION HEAD ---------- */
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 64px}
+  .kicker{
+    color:var(--gold);font-size:.8rem;font-weight:700;letter-spacing:3px;
+    text-transform:uppercase;margin-bottom:16px;display:block;
+  }
+  .sec-head h2{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800}
+  .sec-head p{color:var(--muted);margin-top:18px;font-weight:300;font-size:1.02rem}
+
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--bg-2)}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .about-img{
+    border-radius:24px;overflow:hidden;position:relative;
+    border:1px solid var(--line);aspect-ratio:4/5;
+    background:linear-gradient(135deg,#2a221a,#15110d);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .about-img .ph{font-size:5rem;opacity:.35}
+  .about-img .tag{
+    position:absolute;bottom:20px;left:20px;background:var(--gold);color:#000;
+    padding:10px 18px;border-radius:40px;font-weight:700;font-size:.8rem;
+  }
+  .about-text h2{font-size:clamp(1.9rem,3.5vw,2.8rem);margin-bottom:24px}
+  .about-text p{color:var(--muted);margin-bottom:18px;font-weight:300;font-size:1rem}
+  .about-text p b{color:var(--cream);font-weight:600}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;text-align:center}
+  .stat .num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold)}
+  .stat small{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:1px}
+
+  /* ---------- MENU ---------- */
+  .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .dish{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:30px;transition:.4s ease;position:relative;overflow:hidden;
+  }
+  .dish::before{
+    content:'';position:absolute;top:0;left:0;width:100%;height:3px;
+    background:linear-gradient(90deg,var(--gold),transparent);
+    transform:scaleX(0);transform-origin:left;transition:.4s;
+  }
+  .dish:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:0 24px 50px rgba(0,0,0,.4)}
+  .dish:hover::before{transform:scaleX(1)}
+  .dish .icon{font-size:2.4rem;margin-bottom:18px}
+  .dish h3{font-size:1.3rem;margin-bottom:10px}
+  .dish p{color:var(--muted);font-size:.9rem;font-weight:300}
+  .dish .tag{
+    position:absolute;top:22px;right:22px;font-size:.65rem;font-weight:700;
+    color:var(--gold);border:1px solid var(--line);padding:4px 10px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:1px;
+  }
+
+  /* ---------- REVIEWS ---------- */
+  .reviews{background:var(--bg-2)}
+  .review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .review{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;
+    transition:.35s;
+  }
+  .review:hover{border-color:var(--gold);transform:translateY(-5px)}
+  .review .quote{font-size:2.4rem;color:var(--gold);font-family:'Playfair Display',serif;line-height:.5;margin-bottom:14px}
+  .review p{color:var(--muted);font-size:.92rem;font-weight:300;margin-bottom:22px}
+  .review .who{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:18px}
+  .avatar{
+    width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a5a1e);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;font-size:.95rem;
+  }
+  .who b{display:block;font-size:.9rem}
+  .who small{color:var(--muted);font-size:.75rem}
+
+  /* ---------- LOCATION ---------- */
+  .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:stretch}
+  .map-box{border-radius:20px;overflow:hidden;border:1px solid var(--line);min-height:420px}
+  .map-box iframe{width:100%;height:100%;min-height:420px;border:0;filter:grayscale(.3) contrast(1.05)}
+  .loc-info{display:flex;flex-direction:column;justify-content:center;gap:26px}
+  .loc-item{display:flex;gap:18px;align-items:flex-start}
+  .loc-item .ic{
+    min-width:48px;height:48px;border-radius:14px;background:rgba(224,164,74,.1);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  }
+  .loc-item h4{font-size:.95rem;margin-bottom:4px;font-family:'Inter',sans-serif;font-weight:700}
+  .loc-item p{color:var(--muted);font-size:.9rem;font-weight:300}
+  .loc-item a{color:var(--gold-2)}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#0a0806;border-top:1px solid var(--line);padding:60px 0 30px;text-align:center}
+  footer .logo{font-size:2rem;margin-bottom:16px;display:inline-block}
+  footer p{color:var(--muted);font-size:.85rem}
+  .socials{display:flex;gap:16px;justify-content:center;margin:26px 0}
+  .socials a{
+    width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;transition:.3s;font-size:1.1rem;
+  }
+  .socials a:hover{background:var(--gold);color:#000;border-color:var(--gold);transform:translateY(-3px)}
+  .foot-bottom{border-top:1px solid var(--line);margin-top:34px;padding-top:24px;font-size:.78rem;color:#6b6157}
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(45px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+  /* progress bar */
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-2));z-index:200}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:900px){
+    .hero-grid,.about-grid,.loc-grid{grid-template-columns:1fr;gap:44px}
+    .menu-grid,.review-grid{grid-template-columns:1fr 1fr}
+    .hero-card{order:-1}
+    .hero{min-height:auto;padding-top:140px;padding-bottom:70px}
+  }
+  @media(max-width:640px){
+    .nav-links{display:none}
+    .burger{display:block}
+    .menu-grid,.review-grid,.stats{grid-template-columns:1fr}
+    section{padding:80px 0}
+    .nav-cta{display:none}
+    .hero-btns .btn{width:100%;justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <div class="logo">Bundo<span>.</span>bust</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#location">Find Us</a>
+    </div>
+    <a href="#location" class="nav-cta">Reserve a Table</a>
+    <div class="burger" onclick="document.querySelector('.nav-links').style.display='flex'">☰</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge"><span class="dot"></span> Award-Winning • Leeds, UK</span>
+      <h1>Modern Indian <span class="accent">Street Food</span> & Craft Beer</h1>
+      <p class="sub">Communal tables perfect for sharing bold vegetarian & vegan flavours — paired with an unbeatable craft beer and cocktail selection. Welcome to Bundobust.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="btn btn-primary">Explore the Menu →</a>
+        <a href="#location" class="btn btn-ghost">📍 Find Us in Leeds</a>
+      </div>
+    </div>
+
+    <div class="hero-card reveal">
+      <div class="rating-row">
+        <div class="rating-num">4.7</div>
+        <div>
+          <div class="stars">★★★★★</div>
+          <small>3,907 Google reviews</small>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="info-line"><span>Average price</span><b>£20–30 / person</b></div>
+      <div class="info-line"><span>Cuisine</span><b>Indian Street Food</b></div>
+      <div class="info-line"><span>Dine-in</span><b>Pickup & Delivery</b></div>
+      <div class="info-line"><span>Opening</span><b>Opens 12:00 pm</b></div>
+      <div class="divider"></div>
+      <a href="tel:+441132431248" class="btn btn-primary" style="width:100%;justify-content:center">📞 +44 113 243 1248</a>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-img reveal">
+        <span class="ph">🍛</span>
+        <span class="tag">Bare Brick • Wooden Benches</span>
+      </div>
+      <div class="about-text reveal d1">
+        <span class="kicker">Our Story</span>
+        <h2>A casual craft beer bar serving an Indian street food feast</h2>
+        <p>Hidden on <b>6 Mill Hill</b> in the heart of Leeds, Bundobust brings together the buzz of Indian street food and the craft of British brewing. Bare brick walls, communal wooden benches, and a menu built for sharing.</p>
+        <p>Every dish is <b>vegetarian</b> — and with a huge range of vegan options, the flavours never miss. From the legendary Okra Fries to the Bundobust Chipa and Mango Lassi, everything is cooked fresh and packed with spice.</p>
+        <p>Whether you're here for a quick bite or a long session over craft beer, the vibe is lively, friendly, and reasonably priced.</p>
+        <div class="stats">
+          <div class="stat"><div class="num" data-count="4.7">0</div><small>Google Rating</small></div>
+          <div class="stat"><div class="num" data-count="3907" data-suffix="+">0</div><small>Reviews</small></div>
+          <div class="stat"><div class="num" data-count="100" data-suffix="%">0</div><small>Vegetarian</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Menu & Highlights</span>
+      <h2>Street food worth sharing</h2>
+      <p>Bold flavours, vegetarian-first, and a craft beer list to match. Here are the crowd favourites.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="dish reveal">
+        <span class="tag">Popular</span>
+        <div class="icon">🥔</div>
+        <h3>Okra Fries</h3>
+        <p>The legend itself — crispy okra fries dusted with tangy chaat masala. 68 mentions in reviews for a reason.</p>
+      </div>
+      <div class="dish reveal d1">
+        <span class="tag">Popular</span>
+        <div class="icon">🌯</div>
+        <h3>Bundobust Chipa</h3>
+        <p>A house signature — bold, spiced, and packed with flavour. One of the most ordered dishes on the menu.</p>
+      </div>
+      <div class="dish reveal d2">
+        <span class="tag">Popular</span>
+        <div class="icon">🥭</div>
+        <h3>Mango Lassi</h3>
+        <p>Cool, creamy, and perfectly sweet — the ideal partner to a spicy street food feast.</p>
+      </div>
+      <div class="dish reveal">
+        <div class="icon">🍔</div>
+        <h3>Vada Pav Slider</h3>
+        <p>Mumbai's iconic street burger, reimagined. Spiced potato fritter in a soft bun with chutneys.</p>
+      </div>
+      <div class="dish reveal d1">
+        <div class="icon">🌽</div>
+        <h3>Masala Corn Ribs</h3>
+        <p>Charred corn ribs coated in a punchy masala — smoky, sweet, and seriously addictive.</p>
+      </div>
+      <div class="dish reveal d2">
+        <div class="icon">🍺</div>
+        <h3>Craft Beer Selection</h3>
+        <p>205 review mentions and counting. A rotating tap list of craft beers and cocktails to pair with every bite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">What People Say</span>
+      <h2>Loved by 3,900+ diners</h2>
+      <p>Diners praise the flavour-packed vegetarian food, great beer, and friendly, attentive staff.</p>
+    </div>
+    <div class="review-grid">
+      <div class="review reveal">
+        <div class="quote">"</div>
+        <p>Hard to fault this place. Everything was delicious — it's vegetarian but the flavours are amazing. As a meat eater I was not disappointed. Staff were really friendly and prices very reasonable.</p>
+        <div class="who"><div class="avatar">AB</div><div><b>Andrew Booth</b><small>Local Guide • ★★★★★</small></div></div>
+      </div>
+      <div class="review reveal d1">
+        <div class="quote">"</div>
+        <p>Finally got to try the new Bundo menu and it did not disappoint. The Dhokla Chaat has a spongy cake-like texture — very unusual but super tasty. Big fans of the Bundo Chaat too!</p>
+        <div class="who"><div class="avatar">IC</div><div><b>Isaac Christopher</b><small>★★★★★</small></div></div>
+      </div>
+      <div class="review reveal d2">
+        <div class="quote">"</div>
+        <p>Exceeded all expectations! From the very first bite everything was packed with flavour — the Manchurian Wings, Masala Corn Ribs, and Vada Pav Slider were standouts.</p>
+        <div class="who"><div class="avatar">AP</div><div><b>Akshay Prajapati</b><small>Local Guide • ★★★★★</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Visit Us</span>
+      <h2>Find Bundobust in Leeds</h2>
+      <p>Right in the city centre — come for the food, stay for the beer.</p>
+    </div>
+    <div class="loc-grid">
+      <div class="map-box reveal">
+        <iframe
+          src="https://www.google.com/maps?q=Bundobust,6+Mill+Hill,Leeds+LS1+5DQ,UK&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+      <div class="loc-info reveal d1">
+        <div class="loc-item">
+          <div class="ic">📍</div>
+          <div><h4>Address</h4><p>6 Mill Hill, Leeds LS1 5DQ, United Kingdom</p></div>
+        </div>
+        <div class="loc-item">
+          <div class="ic">📞</div>
+          <div><h4>Phone</h4><p><a href="tel:+441132431248">+44 113 243 1248</a></p></div>
+        </div>
+        <div class="loc-item">
+          <div class="ic">🕒</div>
+          <div><h4>Hours</h4><p>Opens 12:00 pm • See website for full hours</p></div>
+        </div>
+        <div class="loc-item">
+          <div class="ic">🌐</div>
+          <div><h4>Website</h4><p><a href="https://www.bundobust.com/" target="_blank">www.bundobust.com</a></p></div>
+        </div>
+        <div class="loc-item">
+          <div class="ic">🚗</div>
+          <div><h4>Service Options</h4><p>Dine-in • Kerbside pickup • Delivery</p></div>
+        </div>
+        <a href="https://www.google.com/maps?q=Bundobust,6+Mill+Hill,Leeds+LS1+5DQ,UK" target="_blank" class="btn btn-primary" style="align-self:flex-start">Get Directions →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="logo">Bundo<span style="color:var(--gold)">.</span>bust</div>
+    <p>Modern Indian street food & craft beer • Leeds, UK</p>
+    <div class="socials">
+      <a href="https://www.bundobust.com/" target="_blank" title="Website">🌐</a>
+      <a href="tel:+441132431248" title="Call">📞</a>
+      <a href="https://www.google.com/maps?q=Bundobust+Leeds" target="_blank" title="Maps">📍</a>
+    </div>
+    <div class="foot-bottom">© <span id="year"></span> Bundobust. Demo website concept — built for illustration.</div>
+  </div>
+</footer>
+
+<script>
+  /* ---- scroll progress bar ---- */
+  const progress = document.getElementById('progress');
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = scrolled + '%';
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* ---- scroll reveal ---- */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => io.observe(r));
+
+  /* ---- animated counters ---- */
+  const counters = document.querySelectorAll('[data-count]');
+  const co = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseFloat(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const isDecimal = target % 1 !== 0;
+      let start = 0, dur = 1400, t0 = null;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / dur, 1);
+        const val = target * (1 - Math.pow(1 - p, 3));
+        el.textContent = (isDecimal ? val.toFixed(1) : Math.floor(val).toLocaleString()) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      co.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => co.observe(c));
+
+  /* ---- hero parallax ---- */
+  const heroCard = document.querySelector('.hero-card');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight && heroCard) {
+      heroCard.style.transform = `translateY(${y * 0.08}px)`;
+    }
+  });
+
+  /* ---- year ---- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
